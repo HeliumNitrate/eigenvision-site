@@ -8,6 +8,7 @@
 <style>
 :root {
   --bg: #000000;
+  --panel: rgba(255, 255, 255, 0.03);
   --line: rgba(255, 255, 255, 0.08);
   --text: #f5f7fb;
   --muted: rgba(255, 255, 255, 0.68);
@@ -35,14 +36,21 @@ body {
     #000;
 }
 
-/* FLASH */
+/* FLASH EFFECT */
 .flash {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle, rgba(255,0,0,0.9), transparent 70%);
+  background: radial-gradient(circle, rgba(255,0,0,0.9) 0%, rgba(255,0,0,0.2) 40%, transparent 70%);
   opacity: 0;
   pointer-events: none;
   z-index: 999;
+}
+
+/* PAGE */
+.page {
+  min-height: 100vh;
+  position: relative;
+  padding: 28px;
 }
 
 /* BRAND */
@@ -52,14 +60,16 @@ body {
   left: 28px;
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 0px;
+  z-index: 10;
   filter: drop-shadow(0 0 10px rgba(80,150,255,0.15));
 }
 
 .logo-wrapper {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
+  flex: 0 0 120px;
   transform: translateY(-4px);
 }
 
@@ -91,7 +101,6 @@ body {
   100% { opacity: 1; }
 }
 
-/* ACTIVE STATE */
 .logo-wrapper.active #logo-red {
   animation:
     redPulse 2s ease forwards,
@@ -104,9 +113,9 @@ body {
   animation-delay: 2s;
 }
 
-/* TEXT */
 .brand-text {
   width: 380px;
+  max-width: min(58vw, 380px);
   margin-left: 2px;
 }
 
@@ -116,18 +125,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 120px 20px;
+  padding: 120px 20px 40px;
+  text-align: center;
 }
 
 .hero-inner {
   width: min(900px, 100%);
   border: 1px solid var(--line);
   border-radius: 26px;
-  background: rgba(255,255,255,0.02);
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.015));
+  backdrop-filter: blur(6px);
   padding: 42px 28px;
 }
 
-/* STATUS */
 .status {
   display: inline-flex;
   align-items: center;
@@ -137,6 +147,7 @@ body {
   padding: 10px 16px;
   font-size: 12px;
   letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 26px;
 }
@@ -146,12 +157,66 @@ body {
   height: 8px;
   border-radius: 50%;
   background: #7fb2ff;
+  box-shadow: 0 0 14px rgba(80,150,255,0.55);
   animation: blink 1.4s infinite;
 }
 
+.hero h1 {
+  font-size: clamp(26px, 4vw, 42px);
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.pillars {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.pillars span {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.terminal {
+  color: #9fc5ff;
+  font-family: monospace;
+  margin-bottom: 14px;
+}
+
+.cursor::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  margin-left: 6px;
+  background: #8ab4ff;
+  animation: caret 1s infinite;
+}
+
+.note {
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+/* ANIMATIONS */
 @keyframes blink {
   0%,100% { opacity: 1; }
   50% { opacity: 0.3; }
+}
+
+@keyframes caret {
+  0%,50% { opacity: 1; }
+  50.01%,100% { opacity: 0; }
 }
 
 @keyframes flashAnim {
@@ -167,41 +232,56 @@ body {
 
 <div class="flash" id="flash"></div>
 
-<div class="brand-block">
-  <div class="logo-wrapper" id="logoWrapper">
-    <!-- 🔥 BURAYA 1024 LOGOLARI KOY -->
-    <img src="assets/logo/logo_glow_red.png" id="logo-red" class="logo">
-    <img src="assets/logo/logo_glow_blue.png" id="logo-blue" class="logo">
-  </div>
+<div class="page">
 
-  <img src="assets/logo/eigen.png" class="brand-text">
-</div>
-
-<main class="hero">
-  <section class="hero-inner">
-
-    <div class="status">
-      <span class="dot"></span>
-      <span>System Initializing</span>
+  <div class="brand-block">
+    <div class="logo-wrapper" id="logoWrapper">
+      <img src="assets/logo/logo_glow_red.png" id="logo-red" class="logo">
+      <img src="assets/logo/logo_glow_blue.png" id="logo-blue" class="logo">
     </div>
 
-    <h1>A new way to understand structure in visual data.</h1>
-    <p>Geometry over pixels. Extracting meaning from complexity.</p>
+    <img src="assets/logo/eigen.png" class="brand-text">
+  </div>
 
-  </section>
-</main>
+  <main class="hero">
+    <section class="hero-inner">
+
+      <div class="status">
+        <span class="dot"></span>
+        <span>System Initializing</span>
+      </div>
+
+      <h1>A new way to understand structure in visual data.</h1>
+      <p class="subtitle">Geometry over pixels. Extracting meaning from complexity.</p>
+
+      <div class="pillars">
+        <span>Edge</span>
+        <span>Surface</span>
+        <span>Motion</span>
+      </div>
+
+      <div class="terminal">
+        <span class="cursor">&gt;&gt; extracting structure</span>
+      </div>
+
+      <div class="note">first module: segmentation</div>
+
+    </section>
+  </main>
+
+</div>
 
 <script>
 
-// başlat
 setTimeout(() => {
 
-  // flash 2. saniyede gelsin
-  setTimeout(() => {
-    document.getElementById("flash").style.animation = "flashAnim 0.5s ease";
-  }, 2000);
-
   document.getElementById("logoWrapper").classList.add("active");
+
+  // flash geçiş anında gelsin
+  setTimeout(() => {
+    const flash = document.getElementById("flash");
+    flash.style.animation = "flashAnim 0.5s ease";
+  }, 2000);
 
 }, 400);
 
